@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lab1Sys
@@ -12,10 +13,10 @@ namespace Lab1Sys
         public static void TestCaseQueryTimer(string filenameA, string filenameB, string filenameC)
         {
             Console.WriteLine("\nQueryPerfomanceTimer:");
-            double[,] arrayA ;
-            double[,] arrayB ;
-            double[,] arrayC ;
-            string result;
+            double[,] arrayA = null;
+            double[,] arrayB = null;
+            double[,] arrayC = null;
+            string result = null;
 
             QueryPerfomanceTimer timerPerfomanceGlobal = new QueryPerfomanceTimer();
             QueryPerfomanceTimer timerPerfomancelocalReading = new QueryPerfomanceTimer();
@@ -24,19 +25,38 @@ namespace Lab1Sys
 
             timerPerfomanceGlobal.Start();
             timerPerfomancelocalReading.Start();
-            arrayA = ReadWriteArrays.ReadArray($"{filenameA}");
-            arrayB = ReadWriteArrays.ReadArray($"{filenameB}");
-            arrayC = ReadWriteArrays.ReadArray($"{filenameC}");
+
+            Thread threadA = new Thread(() => { arrayA = ReadWriteArrays.ReadArray($"{filenameA}"); });
+            Thread threadB = new Thread(() => { arrayB = ReadWriteArrays.ReadArray($"{filenameB}"); });
+            Thread threadC = new Thread(() => { arrayC = ReadWriteArrays.ReadArray($"{filenameC}"); });
+
+            threadA.Start();
+            threadB.Start();
+            threadC.Start();
+
+            threadA.Join();
+            threadB.Join();
+            threadC.Join();
+
             timerPerfomancelocalReading.Stop();
             Console.WriteLine($" - reading time {timerPerfomancelocalReading.Duration} seconds");
+
             timerPerfomancelocalCalculation.Start();
-            result = CalcProcess.calculation(arrayA, arrayB, arrayC);
+
+            Thread calculationThread = new Thread(() => { result = CalcProcess.calculation(arrayA, arrayB, arrayC); });
+            calculationThread.Start();
+
             timerPerfomancelocalCalculation.Stop();
             Console.WriteLine($" - calculation time {timerPerfomancelocalCalculation.Duration} seconds");
+
             timerPerfomancelocalWriterLogs.Start();
-            ReadWriteArrays.WriteLog("nQueryPerfomanceTimer.txt", result);
+
+            Thread writerThread = new Thread(() => { ReadWriteArrays.WriteLog("nQueryPerfomanceTimer.txt", result); });
+            writerThread.Start();
+
             timerPerfomancelocalWriterLogs.Stop();
             Console.WriteLine($" - write logs time {timerPerfomancelocalWriterLogs.Duration} seconds");
+
             timerPerfomanceGlobal.Stop();
             Console.WriteLine($"--------------\nClear full time {timerPerfomanceGlobal.Duration} seconds");
         }
@@ -45,10 +65,10 @@ namespace Lab1Sys
         public static void TestCaseTimeGetTimeTimer(string filenameA, string filenameB, string filenameC)
         {
             Console.WriteLine("\nTimeGetTimeTimer:");
-            double[,] arrayA;
-            double[,] arrayB;
-            double[,] arrayC;
-            string result;
+            double[,] arrayA = null;
+            double[,] arrayB = null;
+            double[,] arrayC = null;
+            string result = null;
 
             TimeGetTimeTimer timeGetTimeTimerGlobal = new TimeGetTimeTimer();
             TimeGetTimeTimer timeGetTimeTimerlocalReading = new TimeGetTimeTimer();
@@ -57,17 +77,27 @@ namespace Lab1Sys
 
             timeGetTimeTimerGlobal.Start();
             timeGetTimeTimerlocalReading.Start();
-            arrayA = ReadWriteArrays.ReadArray($"{filenameA}");
-            arrayB = ReadWriteArrays.ReadArray($"{filenameB}");
-            arrayC = ReadWriteArrays.ReadArray($"{filenameC}");
+            Thread threadA = new Thread(() => { arrayA = ReadWriteArrays.ReadArray($"{filenameA}"); });
+            Thread threadB = new Thread(() => { arrayB = ReadWriteArrays.ReadArray($"{filenameB}"); });
+            Thread threadC = new Thread(() => { arrayC = ReadWriteArrays.ReadArray($"{filenameC}"); });
+
+            threadA.Start();
+            threadB.Start();
+            threadC.Start();
+
+            threadA.Join();
+            threadB.Join();
+            threadC.Join();
             timeGetTimeTimerlocalReading.Stop();
             Console.WriteLine($" - reading time {timeGetTimeTimerlocalReading.duration} seconds");
             timeGetTimeTimerlocalCalculation.Start();
-            result = CalcProcess.calculation(arrayA, arrayB, arrayC);
+            Thread calculationThread = new Thread(() => { result = CalcProcess.calculation(arrayA, arrayB, arrayC); });
+            calculationThread.Start();
             timeGetTimeTimerlocalCalculation.Stop();
             Console.WriteLine($" - calculation time {timeGetTimeTimerlocalCalculation.duration} seconds");
             timeGetTimeTimerlocalWriterLogs.Start();
-            ReadWriteArrays.WriteLog("TimeGetTimeTimer.txt", result);
+            Thread writerThread = new Thread(() => { ReadWriteArrays.WriteLog("TimeGetTimeTimer.txt", result); });
+            writerThread.Start();
             timeGetTimeTimerlocalWriterLogs.Stop();
             Console.WriteLine($" - write logs time {timeGetTimeTimerlocalWriterLogs.duration} seconds");
             timeGetTimeTimerGlobal.Stop();
@@ -77,10 +107,10 @@ namespace Lab1Sys
         public static void TestCaseThreadTimer(string filenameA, string filenameB, string filenameC)
         {
             Console.WriteLine("\nThreadTimer:");
-            double[,] arrayA;
-            double[,] arrayB;
-            double[,] arrayC;
-            string result;
+            double[,] arrayA = null;
+            double[,] arrayB = null;
+            double[,] arrayC = null;
+            string result = null;
 
             ThreadTimer ThreadTimerGlobal = new ThreadTimer();
             ThreadTimer ThreadTimerlocalReading = new ThreadTimer();
@@ -89,17 +119,27 @@ namespace Lab1Sys
 
             ThreadTimerGlobal.Start();
             ThreadTimerlocalReading.Start();
-            arrayA = ReadWriteArrays.ReadArray($"{filenameA}");
-            arrayB = ReadWriteArrays.ReadArray($"{filenameB}");
-            arrayC = ReadWriteArrays.ReadArray($"{filenameC}");
+            Thread threadA = new Thread(() => { arrayA = ReadWriteArrays.ReadArray($"{filenameA}"); });
+            Thread threadB = new Thread(() => { arrayB = ReadWriteArrays.ReadArray($"{filenameB}"); });
+            Thread threadC = new Thread(() => { arrayC = ReadWriteArrays.ReadArray($"{filenameC}"); });
+
+            threadA.Start();
+            threadB.Start();
+            threadC.Start();
+
+            threadA.Join();
+            threadB.Join();
+            threadC.Join();
             ThreadTimerlocalReading.Stop();
             Console.WriteLine($" - reading time {ThreadTimerlocalReading.duration} seconds");
             ThreadTimerlocalCalculation.Start();
-            result = CalcProcess.calculation(arrayA, arrayB, arrayC);
+            Thread calculationThread = new Thread(() => { result = CalcProcess.calculation(arrayA, arrayB, arrayC); });
+            calculationThread.Start();
             ThreadTimerlocalCalculation.Stop();
             Console.WriteLine($" - calculation time {ThreadTimerlocalCalculation.duration} seconds");
             ThreadTimerlocalWriterLogs.Start();
-            ReadWriteArrays.WriteLog("ThreadTimer.txt", result);
+            Thread writerThread = new Thread(() => { ReadWriteArrays.WriteLog("ThreadTimer.txt", result); });
+            writerThread.Start();
             ThreadTimerlocalWriterLogs.Stop();
             Console.WriteLine($" - write logs time {ThreadTimerlocalWriterLogs.duration} seconds");
             ThreadTimerGlobal.Stop();
