@@ -10,7 +10,7 @@ namespace Lab1Sys
 {
     internal class Program
     {
-        
+
 
         static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace Lab1Sys
                     { 2400, 1800 }
                 };
 
- 
+
             for (int i = 0; i < 3; i++)
             {
                 var rows = arraySizes.ElementAt(i).Key;
@@ -34,9 +34,9 @@ namespace Lab1Sys
                 var filenameB = $"{rows}_{cols}B.txt";
                 var filenameC = $"{rows}_{cols}C.txt";
 
-              
+
                 //Створення масивів і їх запис до файлів
-                var arrayA = ReadWriteArrays.CreateFileArray(rows,cols, filenameA);
+                var arrayA = ReadWriteArrays.CreateFileArray(rows, cols, filenameA);
                 var arrayB = ReadWriteArrays.CreateFileArray(rows, cols, filenameB);
                 var arrayC = ReadWriteArrays.CreateFileArray(rows, cols, filenameC);
 
@@ -44,11 +44,19 @@ namespace Lab1Sys
                 ReadWriteArrays.getFileSizeInBytes(filenameA);
 
                 //Тестові функції для заміру часу, зчитування, обчислення, запису логу
-                TestCases.TestCaseQueryTimer(arrayA, arrayB, arrayC);
-                TestCases.TestCaseTimeGetTimeTimer(arrayA, arrayB, arrayC);
-                TestCases.TestCaseThreadTimer(arrayA, arrayB, arrayC);
+                Thread runThreadTestCaseQueryTimer = new Thread(() => { TestCases.TestCaseQueryTimer(arrayA, arrayB, arrayC); });
+                runThreadTestCaseQueryTimer.Start();
+                runThreadTestCaseQueryTimer.Join();
+                Thread runThreadTestCaseTimeGetTimeTimer = new Thread(() => { TestCases.TestCaseTimeGetTimeTimer(arrayA, arrayB, arrayC); });
+                runThreadTestCaseTimeGetTimeTimer.Start();
+                runThreadTestCaseTimeGetTimeTimer.Join();
+                Thread runThreadTestCaseThreadTimer = new Thread(() => { TestCases.TestCaseThreadTimer(arrayA, arrayB, arrayC); });
+                runThreadTestCaseThreadTimer.Start();
+                runThreadTestCaseThreadTimer.Join();
 
-            }             
+
+
+            }
 
             Console.ReadLine();
 
